@@ -64,6 +64,24 @@ class Music(commands.Cog):
             await ctx.author.voice.channel.connect()
             await ctx.voice_client.disconnect()
 
+    @commands.command(brief='In case smooth jazz time fails')
+    async def jazz(self, ctx):
+        tomfoolery = self.bot.get_channel(Constants.D_CHANNEL_ID)  # specific channel id
+        members = tomfoolery.members
+
+        if len(members) > 0:
+            for member in members:
+                if member.id == Constants.D_MEMBER_ID:  # specific member's id
+                    # https://stackoverflow.com/questions/63036753/discord-py-bot-how-to-play-audio-from-local-files
+                    voice_client = await tomfoolery.connect()
+                    voice_client.play((discord.FFmpegPCMAudio(executable='C:/Program Files/FFmpeg/bin/ffmpeg.exe',
+                                                              source=
+                                                              Constants.SMOOTH_JAZZ_PATH)))
+                    print('playing bob acri')
+                    while voice_client.is_playing():
+                        await sleep(.1)
+                    await voice_client.disconnect()
+
     @tasks.loop(hours=24)
     async def smooth_jazz(self):
         tomfoolery = self.bot.get_channel(Constants.D_CHANNEL_ID)  #specific channel id

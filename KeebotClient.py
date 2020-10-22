@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from Currency import *
 from Music import *
+from Timezone import *
 import pickle
 import os.path
 import random
@@ -10,7 +11,11 @@ import sys
 import Constants
 
 random.seed()
-bot = commands.Bot(command_prefix='`')
+
+# member intent required to retrieve guild members for help command - enabled on Discord API portal
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix='`', intents=intents)
 
 
 @bot.event
@@ -20,7 +25,9 @@ async def on_ready():
 
 @bot.command(brief='Hello world!')
 async def hellr(ctx):
-    await ctx.send("hellrrrrrrrrrr")
+    hell = 'hell'
+    r = 'r' * random.randint(9, 66)
+    await ctx.send(hell + r)
 
 
 @bot.command(brief='View/modify list of sites',
@@ -221,7 +228,7 @@ async def dict_helper(ctx, item_dict: dict, pickle_file: str):  # method for dic
     pickle.dump(item_dict, open(pickle_file, 'wb'))
 
 
-@bot.command()
+@bot.command(brief='🙃')
 async def kms(ctx):
     await ctx.message.delete()
     await bot.close()
@@ -298,6 +305,7 @@ aDict = load_dict(Constants.A_DICT_PATH)
 shareDict = load_dict(Constants.SHARE_DICT_PATH)
 
 # startup
+bot.add_cog(Timezone(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(Currency(bot))
 bot.run(Constants.DISCORD_SECRET)

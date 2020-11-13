@@ -15,12 +15,14 @@ random.seed()
 # member intent required to retrieve guild members for help command - enabled on Discord API portal
 intents = discord.Intents.default()
 intents.members = True
+activity = discord.Activity(name='money go byebye', type=discord.ActivityType.watching)
 bot = commands.Bot(command_prefix='`', intents=intents)
 
 
 @bot.event
 async def on_ready():
-    print('We have logged in as {}'.format(bot.user))
+    print('We have logged in as {}'.format(bot.user) + " at " + str(datetime.now()))
+    await bot.change_presence(activity=activity)
 
 
 @bot.command(brief='Hello world!')
